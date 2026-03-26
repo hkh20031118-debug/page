@@ -41,7 +41,7 @@ img{
   z-index:9999;
 }
 
-/* 点击下一页按钮 */
+/* 下一页按钮 */
 .start-btn{
   margin-top:40px;
   padding:12px 28px;
@@ -49,6 +49,13 @@ img{
   color:#fff;
   border-radius:30px;
   font-size:16px;
+}
+
+/* 点击提示文字 */
+.tip{
+  color:#e63946;
+  font-size:14px;
+  margin-top:10px;
 }
 
 /* 爱心雨 */
@@ -70,24 +77,27 @@ img{
 <div class="page active">
   <h2>🎁 给你准备了一个小惊喜</h2>
   <img src="img1.jpg" alt="惊喜图片">
-  <div class="start-btn" onclick="nextPage()">点一下继续 ✨</div>
+  <div class="start-btn">点一下继续 ✨</div>
+  <div class="tip">点击屏幕继续</div>
 </div>
 
 <!-- 页面2 -->
 <div class="page">
   <h2>✨ 想对你说的话</h2>
   <img src="img2.jpg" alt="想说的话">
+  <div class="tip">点击屏幕继续</div>
 </div>
 
 <!-- 页面3 -->
 <div class="page">
   <h2>🌙 还有一件事</h2>
   <img src="img3.jpg" alt="还有一件事">
+  <div class="tip">点击屏幕继续</div>
 </div>
 
 <!-- 最后一页 -->
 <div class="page">
-  <h2>🎂 解诗锦 23岁生日快乐呀</h2>
+  <h2>🎂 解诗锦 23岁生日快乐</h2>
   <img src="final.jpg" alt="生日快乐">
   <div>
     愿你一直被爱包围 💖<br>
@@ -95,34 +105,54 @@ img{
   </div>
 </div>
 
-<div class="back" onclick="goBack(event)">返回上一页</div>
+<div class="back">返回上一页</div>
 
 <script>
 let current=0;
 const pages=document.querySelectorAll(".page");
 let heartStarted=false;
 
-// 翻页
+// 📌 点击页面翻页（除了返回按钮和第一页按钮）
+document.body.addEventListener("click", function(e){
+  if(e.target.classList.contains("back")) return; // 点击返回
+  if(e.target.classList.contains("start-btn") && current===0){
+    nextPage();
+    return;
+  }
+  // 其他页点击翻页
+  if(current>0 && current<pages.length-1){
+    nextPage();
+  }
+});
+
+// 下一页函数
 function nextPage(){
   pages[current].classList.remove("active");
   current++;
   if(current>=pages.length) current=pages.length-1;
   pages[current].classList.add("active");
 
+  // 隐藏提示文字：最后一页不显示
+  pages.forEach((p,i)=>{
+    const tip = p.querySelector(".tip");
+    if(tip) tip.style.display = (i === pages.length-1) ? "none" : "block";
+  });
+
+  // 最后一页触发爱心雨
   if(current===pages.length-1 && !heartStarted){
     heartRain();
     heartStarted=true;
   }
 }
 
-// 返回
-function goBack(e){
+// 返回上一页
+document.querySelector(".back").addEventListener("click", function(e){
   e.stopPropagation();
   if(current===0) return;
   pages[current].classList.remove("active");
   current--;
   pages[current].classList.add("active");
-}
+});
 
 // 爱心雨
 function heartRain(){
