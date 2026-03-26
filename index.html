@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>解诗锦生日快乐呀</title>
+<title>解诗锦生日快乐</title>
 
 <style>
 body{
@@ -42,7 +42,7 @@ h2{margin-top:40px}
   opacity:0.7;
 }
 
-/* 爱心 */
+/* 爱心动画 */
 .heart{
   position:fixed;
   animation:fall linear forwards;
@@ -58,49 +58,62 @@ h2{margin-top:40px}
 
 <!-- 页面1 -->
 <div class="page active">
-  <h2>🎁 有一个小惊喜给你</h2>
-  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/1.png">
+  <h2>🎁 给你准备了一个小惊喜</h2>
+
+  <!-- 🖼️【替换为你的第一张图片】 -->
+  <img src="img1.jpg">
+
   <div>点一下继续 👇</div>
 </div>
 
 <!-- 页面2 -->
 <div class="page">
-  <h2>🐶 这只小狗想对你说</h2>
-  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/2.png">
-  <div>你今天一定要开心 💖</div>
+  <h2>✨ 想对你说的话</h2>
+
+  <!-- 🖼️【替换为你的第二张图片】 -->
+  <img src="img2.jpg">
+
+  <div>今天一定要开心 💖</div>
 </div>
 
 <!-- 页面3 -->
 <div class="page">
-  <h2>✨ 还有一件很重要的事</h2>
-  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/3.png">
+  <h2>🌙 还有一件很重要的事</h2>
+
+  <!-- 🖼️【替换为你的第三张图片】 -->
+  <img src="img3.jpg">
+
   <div>因为今天很特别…</div>
 </div>
 
 <!-- 页面4（最终页） -->
 <div class="page">
   <h2>🎂 解诗锦 23岁生日快乐</h2>
-  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/birthday.png">
+
+  <!-- 🖼️【替换为你的最终图片】 -->
+  <img src="final.jpg">
+
   <div>
-    愿你永远被爱 包围<br>
-    永远做自己的光 ✨<br><br>
-    💖 生日快乐 💖
+    愿你一直被爱包围 💖<br>
+    每一天都闪闪发光 ✨<br><br>
+    —— 生日快乐，希望你的每一天都有人偷偷为你心动
   </div>
 </div>
 
-<div class="tip">（点击屏幕继续）</div>
+<!-- 最后一页不显示点击提示 -->
+<div class="tip" id="tip">（点击屏幕继续）</div>
 
+<!-- 🎵 音乐 -->
+<!-- 🔥【替换为你自己的音频文件，比如 music.mp3】 -->
 <audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2021/01/27/audio_99c7b0e2d3.mp3">
+  <source src="1.mp3">
 </audio>
 
 <script>
-
 let current=0;
 const pages=document.querySelectorAll(".page");
 
 document.body.addEventListener("click",()=>{
-
   pages[current].classList.remove("active");
   current++;
 
@@ -110,15 +123,15 @@ document.body.addEventListener("click",()=>{
 
   pages[current].classList.add("active");
 
-  // 到最后一页播放音乐
+  // 最后一页播放音乐+爱心动画+隐藏提示
   if(current===pages.length-1){
     bgm.play();
     heartRain();
+    document.getElementById("tip").style.display="none";
   }
-
 });
 
-// 爱心雨
+// 爱心雨动画
 function heartRain(){
   setInterval(()=>{
     const h=document.createElement("div");
@@ -131,7 +144,6 @@ function heartRain(){
     setTimeout(()=>h.remove(),4000);
   },200);
 }
-
 </script>
 
 </body>
