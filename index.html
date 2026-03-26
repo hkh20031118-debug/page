@@ -32,7 +32,7 @@ img{
   margin:20px 0;
 }
 
-/* 🔙 返回按钮（最高优先级） */
+/* 返回按钮 */
 .back{
   position:fixed;
   bottom:20px;
@@ -42,10 +42,10 @@ img{
   background:#ff4d6d;
   color:#fff;
   border-radius:25px;
-  z-index:9999; /* ⭐关键 */
+  z-index:9999;
 }
 
-/* 🎵 播放按钮 */
+/* 播放按钮 */
 .music-btn{
   position:fixed;
   top:20px;
@@ -65,15 +65,25 @@ img{
   font-size:14px;
   opacity:0.7;
 }
+
+/* ❤️ 爱心动画 */
+.heart{
+  position:fixed;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  from{transform:translateY(-10vh)}
+  to{transform:translateY(110vh)}
+}
 </style>
 </head>
- 
+
 <body>
 
 <!-- 🔙 返回 -->
 <div class="back" onclick="goBack(event)">返回上一页</div>
 
-<!-- 🎵 播放按钮（兜底） -->
+<!-- 🎵 播放按钮 -->
 <div class="music-btn" onclick="playMusic(event)">🎵 播放</div>
 
 <!-- 页面 -->
@@ -94,7 +104,7 @@ img{
 </div>
 
 <div class="page">
-  <h2>🎂 解诗锦 23岁生日快乐</h2>
+  <h2>🎂 解诗锦 23岁生日快乐呀🥳</h2>
   <img src="final.jpg">
   <div>
     愿你一直被爱包围 💖<br>
@@ -104,6 +114,7 @@ img{
 
 <div class="tip">（点击屏幕继续）</div>
 
+<!-- 🎵 音频 -->
 <audio id="bgm" loop>
   <source src="1.mp3">
 </audio>
@@ -112,11 +123,11 @@ img{
 
 let current=0;
 const pages=document.querySelectorAll(".page");
+let heartStarted=false;
 
 // 👉 点击翻页
 document.body.addEventListener("click",function(e){
 
-  // ❗屏蔽按钮点击
   if(e.target.classList.contains("back") || e.target.classList.contains("music-btn")) return;
 
   pages[current].classList.remove("active");
@@ -128,9 +139,15 @@ document.body.addEventListener("click",function(e){
 
   pages[current].classList.add("active");
 
+  // 💖 最后一页开启爱心
+  if(current===pages.length-1 && !heartStarted){
+    heartRain();
+    heartStarted=true;
+  }
+
 });
 
-// 🔙 返回（完全修复）
+// 🔙 返回
 function goBack(e){
   e.stopPropagation();
 
@@ -141,11 +158,24 @@ function goBack(e){
   pages[current].classList.add("active");
 }
 
-// 🎵 播放音乐（100%成功）
+// 🎵 播放音乐
 function playMusic(e){
   e.stopPropagation();
-  const audio = document.getElementById("bgm");
-  audio.play();
+  bgm.play();
+}
+
+// ❤️ 爱心雨（补回来了）
+function heartRain(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*10+14)+"px";
+    h.style.animationDuration=(Math.random()*2+3)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },200);
 }
 
 </script>
