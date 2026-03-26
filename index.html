@@ -42,6 +42,17 @@ h2{margin-top:40px}
   opacity:0.7;
 }
 
+.back{
+  position:fixed;
+  top:20px;
+  left:20px;
+  padding:6px 12px;
+  background:#fff;
+  color:#000;
+  border-radius:10px;
+  font-size:14px;
+}
+
 /* 爱心动画 */
 .heart{
   position:fixed;
@@ -56,43 +67,34 @@ h2{margin-top:40px}
 
 <body>
 
-<!-- 页面1 -->
+<!-- 🔙 返回按钮 -->
+<div class="back" onclick="goBack()">← 返回</div>
+
+<!-- 🎁 页面1 -->
 <div class="page active">
   <h2>🎁 给你准备了一个小惊喜</h2>
-
-  <!-- 🖼️【替换为你的第一张图片】 -->
   <img src="img1.jpg">
-
-  <div>点一下继续 👇</div>
+  <div>点一下，有个东西想给你听 🎵</div>
 </div>
 
-<!-- 页面2 -->
+<!-- 🎁 页面2 -->
 <div class="page">
   <h2>✨ 想对你说的话</h2>
-
-  <!-- 🖼️【替换为你的第二张图片】 -->
   <img src="img2.jpg">
-
   <div>今天一定要开心 💖</div>
 </div>
 
-<!-- 页面3 -->
+<!-- 🎁 页面3 -->
 <div class="page">
   <h2>🌙 还有一件很重要的事</h2>
-
-  <!-- 🖼️【替换为你的第三张图片】 -->
   <img src="img3.jpg">
-
   <div>因为今天很特别…</div>
 </div>
 
-<!-- 页面4（最终页） -->
+<!-- 🎂 最后一页 -->
 <div class="page">
   <h2>🎂 解诗锦 23岁生日快乐</h2>
-
-  <!-- 🖼️【替换为你的最终图片】 -->
   <img src="final.jpg">
-
   <div>
     愿你一直被爱包围 💖<br>
     每一天都闪闪发光 ✨<br><br>
@@ -100,20 +102,22 @@ h2{margin-top:40px}
   </div>
 </div>
 
-<!-- 最后一页不显示点击提示 -->
 <div class="tip" id="tip">（点击屏幕继续）</div>
 
-<!-- 🎵 音乐 -->
-<!-- 🔥【替换为你自己的音频文件，比如 music.mp3】 -->
+<!-- 🎵 音乐（已经改成你的 1.mp3） -->
 <audio id="bgm" loop>
   <source src="1.mp3">
 </audio>
 
 <script>
+
 let current=0;
 const pages=document.querySelectorAll(".page");
 
-document.body.addEventListener("click",()=>{
+// 👉 点击切换页面
+document.body.addEventListener("click",(e)=>{
+  if(e.target.classList.contains("back")) return;
+
   pages[current].classList.remove("active");
   current++;
 
@@ -123,15 +127,30 @@ document.body.addEventListener("click",()=>{
 
   pages[current].classList.add("active");
 
-  // 最后一页播放音乐+爱心动画+隐藏提示
-  if(current===pages.length-1){
+  // 🎵 第一次点击播放音乐
+  if(current === 1){
     bgm.play();
+  }
+
+  // 🎂 最后一页效果
+  if(current===pages.length-1){
     heartRain();
     document.getElementById("tip").style.display="none";
   }
 });
 
-// 爱心雨动画
+// 🔙 返回功能
+function goBack(){
+  if(current===0) return;
+
+  pages[current].classList.remove("active");
+  current--;
+  pages[current].classList.add("active");
+
+  document.getElementById("tip").style.display="block";
+}
+
+// 💖 爱心雨
 function heartRain(){
   setInterval(()=>{
     const h=document.createElement("div");
@@ -144,6 +163,7 @@ function heartRain(){
     setTimeout(()=>h.remove(),4000);
   },200);
 }
+
 </script>
 
 </body>
