@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>解诗锦生日快乐</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:sans-serif;
+  text-align:center;
+  overflow:hidden;
+  background:linear-gradient(to bottom,#1e1e2f,#3a0ca3);
+  color:#fff;
+}
+
+.start{
+  position:fixed;
+  width:100%;height:100%;
+  background:#ff4d6d;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+
+.start button{
+  padding:14px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#fff;
+  color:#ff4d6d;
+}
+
+.main{
+  display:none;
+  padding:40px 20px;
+}
+
+h1{
+  font-size:26px;
+  margin-bottom:10px;
+}
+
+.date{
+  font-size:14px;
+  opacity:0.8;
+}
+
+.cake{
+  width:200px;
+  border-radius:20px;
+  margin:20px 0;
+}
+
+.msg{
+  margin-top:10px;
+  line-height:1.8;
+  font-size:16px;
+  min-height:140px;
+}
+
+.heart{
+  position:fixed;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  from{transform:translateY(-10vh)}
+  to{transform:translateY(110vh)}
+}
+
+.firework{
+  position:fixed;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:#fff;
+  animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+  to{
+    transform:translate(var(--x),var(--y));
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="start" id="startPage">
+  <h2>🎁 给你准备了一个小惊喜</h2>
+  <button onclick="start()">点击开启</button>
+</div>
+
+<div class="main" id="mainPage">
+  <h1>🎂 解诗锦 23岁生日快乐</h1>
+  <div class="date">2026 · 3月26日</div>
+
+  <img class="cake" src="https://picsum.photos/id/292/400/400">
+
+  <div class="msg" id="text"></div>
+</div>
+
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2021/01/27/audio_99c7b0e2d3.mp3">
+</audio>
+
+<script>
+
+function start(){
+  startPage.style.display="none";
+  mainPage.style.display="block";
+  bgm.play();
+  typeText();
+}
+
+// 🎁 定制文案（重点）
+const content = 
+"今天是属于你的日子 🎉\n\n" +
+"解诗锦，23岁啦\n" +
+"愿这一岁的你\n" +
+"比过去更自由，更勇敢，也更被爱 💖\n\n" +
+"愿你眼里有光，脚下有路\n" +
+"所到之处皆温柔\n" +
+"所遇之人皆善良\n\n" +
+"不止今天快乐\n" +
+"而是以后的每一天，都值得被认真对待 ✨";
+
+let i=0;
+function typeText(){
+  if(i < content.length){
+    text.innerHTML += content[i] === "\n" ? "<br>" : content[i];
+    i++;
+    setTimeout(typeText,70);
+  }
+}
+
+// 爱心雨
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=(Math.random()*10+14)+"px";
+  h.style.animationDuration=(Math.random()*2+3)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+},200);
+
+// 点击特效
+document.addEventListener("click",e=>{
+  
+  // 爱心
+  const heart=document.createElement("div");
+  heart.innerHTML="💖";
+  heart.style.position="fixed";
+  heart.style.left=e.clientX+"px";
+  heart.style.top=e.clientY+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),1000);
+
+  // 烟花
+  for(let i=0;i<15;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=e.clientX+"px";
+    f.style.top=e.clientY+"px";
+    f.style.setProperty("--x",(Math.random()-0.5)*200+"px");
+    f.style.setProperty("--y",(Math.random()-0.5)*200+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
+});
+
+</script>
+
+</body>
+</html>
