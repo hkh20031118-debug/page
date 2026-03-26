@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>解诗锦生日快乐</title>
@@ -8,8 +8,8 @@
 body{
   margin:0;
   font-family:sans-serif;
-  background:#111;
-  color:#fff;
+  background:#fff0f6;
+  color:#333;
   text-align:center;
   overflow:hidden;
 }
@@ -18,7 +18,7 @@ body{
   position:absolute;
   width:100%;
   height:100%;
-  top:0;left:0;
+  top:0; left:0;
   padding:40px 20px;
 }
 .active{display:block}
@@ -28,7 +28,7 @@ img{
   margin:20px 0;
 }
 
-/* 中下返回按钮 */
+/* 返回按钮 */
 .back{
   position:fixed;
   bottom:20px;
@@ -40,7 +40,8 @@ img{
   border-radius:25px;
   z-index:9999;
 }
-/* 点击播放音乐按钮 */
+
+/* 点击下一页按钮 */
 .start-btn{
   margin-top:40px;
   padding:12px 28px;
@@ -50,30 +51,16 @@ img{
   font-size:16px;
 }
 
-/* ❤️ 爱心 */
+/* 爱心雨 */
 .heart{
   position:fixed;
   animation:fall linear forwards;
   z-index:10;
 }
 
-/* 大叔特效：闪烁光圈 */
-.light-circle{
-  position:fixed;
-  border-radius:50%;
-  pointer-events:none;
-  opacity:0.6;
-  z-index:5;
-  mix-blend-mode: screen;
-  animation:lightAnim linear forwards;
-}
 @keyframes fall{
   from{transform:translateY(-10vh)}
   to{transform:translateY(110vh)}
-}
-@keyframes lightAnim{
-  from{transform:scale(0); opacity:0.6;}
-  to{transform:scale(3); opacity:0;}
 }
 </style>
 </head>
@@ -83,7 +70,7 @@ img{
 <div class="page active">
   <h2>🎁 给你准备了一个小惊喜</h2>
   <img src="img1.jpg" alt="惊喜图片">
-  <div class="start-btn" onclick="start(event)">点一下，有个东西想给你听 🎵</div>
+  <div class="start-btn" onclick="nextPage()">点一下继续 ✨</div>
 </div>
 
 <!-- 页面2 -->
@@ -100,7 +87,7 @@ img{
 
 <!-- 最后一页 -->
 <div class="page">
-  <h2>🎂 解诗锦 23岁生日快乐</h2>
+  <h2>🎂 解诗锦 23岁生日快乐呀</h2>
   <img src="final.jpg" alt="生日快乐">
   <div>
     愿你一直被爱包围 💖<br>
@@ -110,31 +97,12 @@ img{
 
 <div class="back" onclick="goBack(event)">返回上一页</div>
 
-<!-- 在线音频 -->
-<audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2021/01/27/audio_99c7b0e2d3.mp3" type="audio/mp3">
-</audio>
-
 <script>
 let current=0;
 const pages=document.querySelectorAll(".page");
 let heartStarted=false;
-let musicStarted=false;
-const bgm=document.getElementById("bgm");
-
-// 用户点击按钮播放音乐并翻页
-function start(e){
-  e.stopPropagation();
-  if(!musicStarted){ bgm.play(); musicStarted=true; }
-  nextPage();
-}
 
 // 翻页
-document.body.addEventListener("click",function(e){
-  if(e.target.classList.contains("back") || e.target.classList.contains("start-btn")) return;
-  nextPage();
-});
-
 function nextPage(){
   pages[current].classList.remove("active");
   current++;
@@ -143,7 +111,6 @@ function nextPage(){
 
   if(current===pages.length-1 && !heartStarted){
     heartRain();
-    uncleLightEffect();
     heartStarted=true;
   }
 }
@@ -171,21 +138,6 @@ function heartRain(){
       setTimeout(()=>h.remove(),4000);
     }
   },100);
-}
-
-// 大叔特效
-function uncleLightEffect(){
-  setInterval(()=>{
-    const c=document.createElement("div");
-    c.className="light-circle";
-    c.style.background='radial-gradient(circle, #ff4d6d, transparent)';
-    c.style.width=c.style.height=(Math.random()*60+40)+'px';
-    c.style.left=Math.random()*100+'vw';
-    c.style.top=Math.random()*80+'vh';
-    c.style.animationDuration=(Math.random()*1+1.5)+'s';
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),2000);
-  },200);
 }
 </script>
 
