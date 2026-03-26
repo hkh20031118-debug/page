@@ -32,15 +32,7 @@ img{
   margin:20px 0;
 }
 
-.tip{
-  position:fixed;
-  bottom:80px;
-  width:100%;
-  font-size:14px;
-  opacity:0.7;
-}
-
-/* 🔙 中下返回键 */
+/* 🔙 返回按钮（最高优先级） */
 .back{
   position:fixed;
   bottom:20px;
@@ -50,59 +42,67 @@ img{
   background:#ff4d6d;
   color:#fff;
   border-radius:25px;
-  font-size:15px;
+  z-index:9999; /* ⭐关键 */
 }
 
-/* ❤️ 爱心 */
-.heart{
+/* 🎵 播放按钮 */
+.music-btn{
   position:fixed;
-  animation:fall linear forwards;
+  top:20px;
+  right:20px;
+  background:#fff;
+  color:#000;
+  padding:6px 10px;
+  border-radius:10px;
+  font-size:12px;
+  z-index:9999;
 }
-@keyframes fall{
-  from{transform:translateY(-10vh)}
-  to{transform:translateY(110vh)}
+
+.tip{
+  position:fixed;
+  bottom:80px;
+  width:100%;
+  font-size:14px;
+  opacity:0.7;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔙 返回按钮（只保留一个） -->
+<!-- 🔙 返回 -->
 <div class="back" onclick="goBack(event)">返回上一页</div>
 
-<!-- 页面1 -->
+<!-- 🎵 播放按钮（兜底） -->
+<div class="music-btn" onclick="playMusic(event)">🎵 播放</div>
+
+<!-- 页面 -->
 <div class="page active">
   <h2>🎁 给你准备了一个小惊喜</h2>
   <img src="img1.jpg">
-  <div>点一下，有个东西想给你听 🎵</div>
+  <div>点一下继续 👇</div>
 </div>
 
-<!-- 页面2 -->
 <div class="page">
   <h2>✨ 想对你说的话</h2>
   <img src="img2.jpg">
-  <div>今天一定要开心 💖</div>
 </div>
 
-<!-- 页面3 -->
 <div class="page">
-  <h2>🌙 还有一件很重要的事</h2>
+  <h2>🌙 还有一件事</h2>
   <img src="img3.jpg">
-  <div>因为今天很特别…</div>
 </div>
 
-<!-- 最后一页 -->
 <div class="page">
-  <h2>🎂 解诗锦 23岁生日快乐呀</h2>
+  <h2>🎂 解诗锦 23岁生日快乐</h2>
   <img src="final.jpg">
   <div>
     愿你一直被爱包围 💖<br>
-    每一天都闪闪发光 ✨<br><br>
-    —— 生日快乐，希望你的每一天都有人偷偷为你心动
+    —— 希望你的每一天都有人偷偷为你心动
   </div>
 </div>
 
-<div class="tip" id="tip">（点击屏幕继续）</div>
+<div class="tip">（点击屏幕继续）</div>
 
 <audio id="bgm" loop>
   <source src="1.mp3">
@@ -112,13 +112,12 @@ img{
 
 let current=0;
 const pages=document.querySelectorAll(".page");
-let musicStarted=false;
 
-// 👉 点击切换页面
-document.body.addEventListener("click",(e)=>{
+// 👉 点击翻页
+document.body.addEventListener("click",function(e){
 
-  // ❗点击返回按钮不翻页
-  if(e.target.classList.contains("back")) return;
+  // ❗屏蔽按钮点击
+  if(e.target.classList.contains("back") || e.target.classList.contains("music-btn")) return;
 
   pages[current].classList.remove("active");
   current++;
@@ -129,26 +128,9 @@ document.body.addEventListener("click",(e)=>{
 
   pages[current].classList.add("active");
 
-  // 🎵 第一次点击播放音乐
-  if(!musicStarted){
-    bgm.play().then(()=>{
-      musicStarted=true;
-    }).catch(()=>{});
-  }
-
-  // 🎂 最后一页
-  if(current===pages.length-1){
-    heartRain();
-    document.getElementById("tip").style.display="none";
-
-    if(!musicStarted){
-      bgm.play();
-      musicStarted=true;
-    }
-  }
 });
 
-// 🔙 返回
+// 🔙 返回（完全修复）
 function goBack(e){
   e.stopPropagation();
 
@@ -157,22 +139,13 @@ function goBack(e){
   pages[current].classList.remove("active");
   current--;
   pages[current].classList.add("active");
-
-  document.getElementById("tip").style.display="block";
 }
 
-// ❤️ 爱心雨
-function heartRain(){
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerHTML="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=(Math.random()*10+14)+"px";
-    h.style.animationDuration=(Math.random()*2+3)+"s";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4000);
-  },200);
+// 🎵 播放音乐（100%成功）
+function playMusic(e){
+  e.stopPropagation();
+  const audio = document.getElementById("bgm");
+  audio.play();
 }
 
 </script>
