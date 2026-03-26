@@ -6,106 +6,89 @@
 <title>解诗锦生日快乐呀</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
 body{
+  margin:0;
   font-family:sans-serif;
+  background:#111;
+  color:#fff;
   text-align:center;
   overflow:hidden;
-  background:linear-gradient(to bottom,#1e1e2f,#3a0ca3);
-  color:#fff;
 }
 
-.start{
-  position:fixed;
-  width:100%;height:100%;
-  background:#ff4d6d;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
-}
-
-.start button{
-  padding:14px 28px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
-  background:#fff;
-  color:#ff4d6d;
-}
-
-.main{
+.page{
   display:none;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;left:0;
   padding:40px 20px;
 }
 
-h1{
-  font-size:26px;
-  margin-bottom:10px;
-}
+.active{display:block}
 
-.date{
-  font-size:14px;
-  opacity:0.8;
-}
-
-.cake{
-  width:200px;
+img{
+  width:220px;
   border-radius:20px;
   margin:20px 0;
 }
 
-.msg{
-  margin-top:10px;
-  line-height:1.8;
-  font-size:16px;
-  min-height:140px;
+h2{margin-top:40px}
+
+.tip{
+  position:fixed;
+  bottom:30px;
+  width:100%;
+  font-size:14px;
+  opacity:0.7;
 }
 
+/* 爱心 */
 .heart{
   position:fixed;
   animation:fall linear forwards;
 }
-
 @keyframes fall{
   from{transform:translateY(-10vh)}
   to{transform:translateY(110vh)}
-}
-
-.firework{
-  position:fixed;
-  width:6px;height:6px;
-  border-radius:50%;
-  background:#fff;
-  animation:explode 1s ease-out forwards;
-}
-
-@keyframes explode{
-  to{
-    transform:translate(var(--x),var(--y));
-    opacity:0;
-  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="start" id="startPage">
-  <h2>🎁 给你准备了一个小惊喜</h2>
-  <button onclick="start()">点击开启</button>
+<!-- 页面1 -->
+<div class="page active">
+  <h2>🎁 有一个小惊喜给你</h2>
+  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/1.png">
+  <div>点一下继续 👇</div>
 </div>
 
-<div class="main" id="mainPage">
-  <h1>🎂 解诗锦 23岁生日快乐</h1>
-  <div class="date">2026 · 3月26日</div>
-
-  <img class="cake" src="https://picsum.photos/id/292/400/400">
-
-  <div class="msg" id="text"></div>
+<!-- 页面2 -->
+<div class="page">
+  <h2>🐶 这只小狗想对你说</h2>
+  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/2.png">
+  <div>你今天一定要开心 💖</div>
 </div>
+
+<!-- 页面3 -->
+<div class="page">
+  <h2>✨ 还有一件很重要的事</h2>
+  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/3.png">
+  <div>因为今天很特别…</div>
+</div>
+
+<!-- 页面4（最终页） -->
+<div class="page">
+  <h2>🎂 解诗锦 23岁生日快乐</h2>
+  <img src="https://cdn.jsdelivr.net/gh/zhheo/JS-CDN@main/linet-dog/birthday.png">
+  <div>
+    愿你永远被爱 包围<br>
+    永远做自己的光 ✨<br><br>
+    💖 生日快乐 💖
+  </div>
+</div>
+
+<div class="tip">（点击屏幕继续）</div>
 
 <audio id="bgm" loop>
   <source src="https://cdn.pixabay.com/download/audio/2021/01/27/audio_99c7b0e2d3.mp3">
@@ -113,70 +96,41 @@ h1{
 
 <script>
 
-function start(){
-  startPage.style.display="none";
-  mainPage.style.display="block";
-  bgm.play();
-  typeText();
-}
+let current=0;
+const pages=document.querySelectorAll(".page");
 
-// 🎁 定制文案（重点）
-const content = 
-"今天是属于你的日子 🎉\n\n" +
-"解诗锦，23岁啦\n" +
-"愿这一岁的你\n" +
-"比过去更自由，更勇敢，也更被爱 💖\n\n" +
-"愿你眼里有光，脚下有路\n" +
-"所到之处皆温柔\n" +
-"所遇之人皆善良\n\n" +
-"不止今天快乐\n" +
-"而是以后的每一天，都值得被认真对待 ✨";
+document.body.addEventListener("click",()=>{
 
-let i=0;
-function typeText(){
-  if(i < content.length){
-    text.innerHTML += content[i] === "\n" ? "<br>" : content[i];
-    i++;
-    setTimeout(typeText,70);
+  pages[current].classList.remove("active");
+  current++;
+
+  if(current>=pages.length){
+    current=pages.length-1;
   }
-}
+
+  pages[current].classList.add("active");
+
+  // 到最后一页播放音乐
+  if(current===pages.length-1){
+    bgm.play();
+    heartRain();
+  }
+
+});
 
 // 爱心雨
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="❤️";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=(Math.random()*10+14)+"px";
-  h.style.animationDuration=(Math.random()*2+3)+"s";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),4000);
-},200);
-
-// 点击特效
-document.addEventListener("click",e=>{
-  
-  // 爱心
-  const heart=document.createElement("div");
-  heart.innerHTML="💖";
-  heart.style.position="fixed";
-  heart.style.left=e.clientX+"px";
-  heart.style.top=e.clientY+"px";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),1000);
-
-  // 烟花
-  for(let i=0;i<15;i++){
-    const f=document.createElement("div");
-    f.className="firework";
-    f.style.left=e.clientX+"px";
-    f.style.top=e.clientY+"px";
-    f.style.setProperty("--x",(Math.random()-0.5)*200+"px");
-    f.style.setProperty("--y",(Math.random()-0.5)*200+"px");
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1000);
-  }
-});
+function heartRain(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*10+14)+"px";
+    h.style.animationDuration=(Math.random()*2+3)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },200);
+}
 
 </script>
 
