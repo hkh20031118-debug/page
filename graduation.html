@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>毕业快乐</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0b0c1a;
+  color:#fff;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* 星空背景 */
+.star-bg{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+/* 页面 */
+.page{
+  display:none;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0; left:0;
+  padding:40px 20px;
+}
+.active{display:block}
+
+img{
+  width:220px;
+  border-radius:16px;
+  margin:20px 0;
+}
+
+/* 返回按钮 */
+.back{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:10px 24px;
+  background:#ffffff20;
+  color:#fff;
+  border-radius:25px;
+  backdrop-filter: blur(6px);
+}
+
+/* 提示 */
+.tip{
+  margin-top:10px;
+  font-size:14px;
+  opacity:0.6;
+}
+
+/* 学士帽 🎓 */
+.cap{
+  position:fixed;
+  animation:fall linear forwards;
+}
+
+/* 星星 */
+.star{
+  position:fixed;
+  color:#fff;
+  opacity:0.8;
+  animation:starFall linear forwards;
+}
+
+/* 毕业证 */
+.certificate{
+  width:180px;
+  margin-top:20px;
+  animation:pop 1s ease forwards;
+}
+
+@keyframes fall{
+  from{transform:translateY(-10vh) rotate(0deg)}
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+
+@keyframes starFall{
+  from{transform:translateY(-10vh);opacity:1}
+  to{transform:translateY(110vh);opacity:0}
+}
+
+@keyframes pop{
+  0%{transform:scale(0)}
+  70%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 页面1 -->
+<div class="page active">
+  <h2>🎓 给你准备了一个毕业小惊喜</h2>
+  <img src="img1.jpg">
+  <div class="tip">点击屏幕继续</div>
+</div>
+
+<!-- 页面2 -->
+<div class="page">
+  <h2>✨ 想对你说的话</h2>
+  <img src="img2.jpg">
+  <div>
+    愿你此去繁花似锦<br>
+    前路皆是坦途 ✨
+  </div>
+  <div class="tip">点击屏幕继续</div>
+</div>
+
+<!-- 页面3 -->
+<div class="page">
+  <h2>🌙 这一段路</h2>
+  <img src="img3.jpg">
+  <div>
+    刚好有你同行<br>
+    已经很幸运了
+  </div>
+  <div class="tip">点击屏幕继续</div>
+</div>
+
+<!-- 最后一页 -->
+<div class="page">
+  <h2>🎓 毕业快乐</h2>
+
+  <!-- 📜 毕业证动画 -->
+  <img class="certificate" src="certificate.png">
+
+  <div>
+    山高路远，各自珍重<br>
+    但我们终会在更高处相见 ✨
+  </div>
+</div>
+
+<div class="back">返回上一页</div>
+
+<script>
+let current=0;
+const pages=document.querySelectorAll(".page");
+let started=false;
+
+// 点击翻页
+document.body.addEventListener("click",(e)=>{
+  if(e.target.classList.contains("back")) return;
+
+  pages[current].classList.remove("active");
+  current++;
+
+  if(current>=pages.length){
+    current=pages.length-1;
+  }
+
+  pages[current].classList.add("active");
+
+  if(current===pages.length-1 && !started){
+    capRain();
+    starRain();
+    started=true;
+  }
+});
+
+// 返回
+document.querySelector(".back").onclick=(e)=>{
+  e.stopPropagation();
+  if(current===0) return;
+
+  pages[current].classList.remove("active");
+  current--;
+  pages[current].classList.add("active");
+};
+
+// 🎓 学士帽
+function capRain(){
+  setInterval(()=>{
+    for(let i=0;i<2;i++){
+      const c=document.createElement("div");
+      c.className="cap";
+      c.innerHTML="🎓";
+      c.style.left=Math.random()*100+"vw";
+      c.style.fontSize=(Math.random()*20+20)+"px";
+      c.style.animationDuration=(Math.random()*3+3)+"s";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),5000);
+    }
+  },150);
+}
+
+// ⭐ 星星
+function starRain(){
+  setInterval(()=>{
+    for(let i=0;i<2;i++){
+      const s=document.createElement("div");
+      s.className="star";
+      s.innerHTML="✨";
+      s.style.left=Math.random()*100+"vw";
+      s.style.fontSize=(Math.random()*8+8)+"px";
+      s.style.animationDuration=(Math.random()*3+2)+"s";
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),4000);
+    }
+  },200);
+}
+</script>
+
+</body>
+</html>
